@@ -13,26 +13,26 @@
 <button id="logoutButton" class="btn btn-danger text-white" style="position: absolute; top: 10px; right: 10px;">Logout</button>
 
 <div class="container my-5">
-    <div class="row">
+   <div class="row">
         <div class="col-lg-6 mt-4 mx-auto">
             <div class="card p-4 shadow-lg" style="background-color: white;">
                 <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h2 id="form-title" class="text-center" style="color: rgb(28, 121, 28);">Add New Category</h2>
+                    <h2 id="form-title" class="text-center" style="color: #8B4513;">Add New Category</h2>
                     <button class="btn w-50" id="addProductButton" style="background-color: #9a0806; color: rgb(255, 255, 255);">Add Product</button>
                 </div>
                 <div id="alertMessage" class="alert" style="display: none; text-align:center; font-weight:bold;"></div>
     
                 <form id="categoryForm">
                     <div class="mb-3">
-                        <label for="categoryName" style="color: rgb(28, 121, 28);" class="form-label">Category Name</label>
+                        <label for="categoryName" style="color: #8B4513;" class="form-label">Category Name</label>
                         <input type="text" class="form-control" id="categoryName" required>
                     </div>
                     <div class="mb-3">
-                        <label for="categoryImage" style="color: rgb(28, 121, 28)" class="form-label">Category Image</label>
+                        <label for="categoryImage" style="color:#8B4513;" class="form-label">Category Image</label>
                         <img id="imagePreview" src="" alt="" class="img-thumbnail mb-3" style="max-height: 150px; display: none;">
                         <input type="file" class="form-control" id="categoryImage" accept="image/jpeg, image/png" required>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100" id="submitButton" style="background-color: rgb(4, 70, 4);">Add Category</button>
+                    <button type="submit" class="btn btn-primary w-100" id="submitButton" style="background-color: #8B4513;">Add Category</button>
                 </form>
             </div>
         </div>
