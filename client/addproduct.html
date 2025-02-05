@@ -216,7 +216,10 @@
     formData.append('name', productName);
     formData.append('price', productPrice);
     formData.append('category', categoryId);
-    formData.append('description', $('#productDescription').val()); // Add description to formData
+
+    if (productDescription) {
+        formData.append('description', productDescription);
+    }
 
     if (productImage) {
         formData.append('image', productImage);
@@ -282,6 +285,7 @@
                 $('#productPrice').val(product.price);
                 $('#categorySelect').val(product.category._id);
                 $('#imagePreview').attr('src', `${apiUrl}/uploads/${product.imageUrl}`).show();
+                $('#productDescription').val(product.description || '');
 
                 editingProductId = productId;  // Set the editing product ID
                 $('#form-title').text('Edit Product');
