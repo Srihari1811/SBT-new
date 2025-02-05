@@ -37,7 +37,8 @@ const productSchema = new mongoose.Schema({
     name: String,
     price: Number,
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
-    imageUrl: String
+    imageUrl: String,
+    description: String // Add description field to the schema
 });
 
 const Product = mongoose.model('Product', productSchema);
@@ -157,9 +158,9 @@ app.delete('/deleteCategory/:id', async (req, res) => {
     }
 });
 
-// Route to Add a New Product
+// Route to add a new product
 app.post('/addProduct', upload.single('image'), async (req, res) => {
-    const { name, price, category } = req.body;
+    const { name, price, category, description } = req.body;  // Add description from request body
     const file = req.file;  // File uploaded via multer
 
     try {
@@ -179,6 +180,7 @@ app.post('/addProduct', upload.single('image'), async (req, res) => {
                 name,
                 price,
                 category,
+                description,  // Add description to product data
                 imageUrl
             });
 
@@ -191,6 +193,55 @@ app.post('/addProduct', upload.single('image'), async (req, res) => {
         res.status(500).json({ message: 'Server Error' });
     }
 });
+
+// Route to Update a Product
+// Route to Update a Product (non-mandatory fields)
+app.put('/updateProduct/:id', upload.single('image'), async (req, res) => {
+    try {
+        const productId = req.params.id;
+
+        // Fetch the existing product details first
+        const existingProduct = await Product.findById(productId);
+        if (!existingProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Only update the fields that are provided (non-mandatory)
+        const updateData = {
+            name: req.body.name || existingProduct.name,             // Use existing value if not provided
+            price: req.body.price || existingProduct.price,          // Use existing value if not provided
+            category: req.body.category || existingProduct.category, // Use existing value if not provided
+            description: req.body.description || existingProduct.description // Use existing value if not provided
+        };
+
+        if (req.file) {
+            // If a new image is uploaded, update the image
+            const file = req.file;
+
+            cloudinary.uploader.upload_stream({ resource_type: 'auto' }, async (error, result) => {
+                if (error) {
+                    console.error('Image upload error:', error);
+                    return res.status(500).json({ message: 'Image upload failed' });
+                }
+
+                const imageUrl = result.secure_url;
+                updateData.imageUrl = imageUrl; // Set the new image URL
+
+                // Update the product in MongoDB
+                const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
+                res.status(200).json({ message: 'Product updated successfully', updatedProduct });
+            }).end(file.buffer);
+        } else {
+            // If no new image, update other fields only
+            const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
+            res.status(200).json({ message: 'Product updated successfully', updatedProduct });
+        }
+    } catch (error) {
+        console.error('Update Product Error:', error);
+        res.status(500).json({ message: 'Failed to update product' });
+    }
+});
+
 
 // Route to fetch all products or filter by category
 app.get('/products', async (req, res) => {
@@ -228,39 +279,6 @@ app.get('/products/:id', async (req, res) => {
     }
 });
 
-// Route to Update a Product
-app.put('/updateProduct/:id', upload.single('image'), async (req, res) => {
-    try {
-        const productId = req.params.id;
-        const { name, price, category } = req.body;
-
-        let updateData = { name, price, category };
-
-        if (req.file) {
-            const file = req.file;
-
-            cloudinary.uploader.upload_stream({ resource_type: 'auto' }, async (error, result) => {
-                if (error) {
-                    console.error('Image upload error:', error);
-                    return res.status(500).json({ message: 'Image upload failed' });
-                }
-
-                const imageUrl = result.secure_url;
-                updateData.imageUrl = imageUrl;
-
-                // Update product in MongoDB
-                const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
-                res.status(200).json({ message: 'Product updated successfully', updatedProduct });
-            }).end(file.buffer);
-        } else {
-            const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
-            res.status(200).json({ message: 'Product updated successfully', updatedProduct });
-        }
-    } catch (error) {
-        console.error('Update Product Error:', error);
-        res.status(500).json({ message: 'Failed to update product' });
-    }
-});
 
 // Route to delete a product
 app.delete('/deleteProduct/:id', async (req, res) => {
