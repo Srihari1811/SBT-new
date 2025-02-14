@@ -142,7 +142,7 @@
                             <h5 class="fw-bold mb-2">${product.name}</h5>
                             
                             <!-- Product Description -->
-                            <p class="mb-2 text-muted">${product.description || 'No description available'}</p>
+                            <p class="mb-2 p-2 text-muted">${product.description || 'No description available'}</p>
                             
                             <!-- Product Price -->
                             <span class="text-primary fw-bold">Rs. ${product.price}</span>
@@ -233,27 +233,32 @@ function renderProducts(products) {
     products.forEach(product => {
         const productCard = `
             <div class="col-lg-3 col-md-6">
-                <div class="product-item position-relative bg-light overflow-hidden h-100 shadow-sm">
+                <div class="product-item d-flex flex-column position-relative bg-light overflow-hidden h-100 shadow-sm">
                     <img class="img-fluid w-10 d-block mx-auto" src="${product.imageUrl}" alt="${product.name}">
-                    <div class="text-center py-2">
+                    <div class="text-center py-2 flex-grow-1">
                         <h5 class="fw-bold mb-1">${product.name}</h5>
-                        <p class="text-muted mb-1">${product.description ? product.description : 'No description available'}</p>
-                        <span class="text-align fw-bold" style="color:#a45430;">Rs.${product.price}</span>
-                         <div class="d-flex border-top">
-                        <small class="w-100 text-center py-2" >
-                            <button class="text-white w-100 btn btn- add-to-cart-btn" data-product-id="${product.id}"  style="background-color:#a45430;">
-                                <i class="fa fa-shopping-bag text-white me-2" ></i>Add to cart
-                            </button>
-                        </small>
+                        <p class="text-muted mb-1 p-2" style="margin-right: 5px; word-wrap: break-word;">${product.description ? product.description : 'No description available'}</p>
                     </div>
+                    <!-- New container for price and button to keep them together at the bottom -->
+                    <div class="mt-auto">
+                        <div class="text-center py-2">
+                            <span class="fw-bold" style="color:#a45430;">Rs.${product.price}</span>
+                        </div>
+                        <div class="d-flex border-top">
+                            <small class="w-100 text-center py-2">
+                                <button class="text-white w-100 btn btn-add-to-cart" data-product-id="${product.id}" style="background-color:#a45430;">
+                                    <i class="fa fa-shopping-bag text-white me-2"></i>Add to cart
+                                </button>
+                            </small>
+                        </div>
                     </div>
-                   
                 </div>
             </div>
         `;
         productsContainer.innerHTML += productCard;
     });
     
+        
 
             
     // Add event listener to handle "Add to Cart" click
@@ -617,7 +622,7 @@ updateCartCount();
 
 
 document.getElementById('proceedToCheckout').addEventListener('click', () => {
-    const phoneNumber = "916380944811"; // Include country code (e.g., 91 for India)
+    const phoneNumber = "919791636464"; // Include country code (e.g., 91 for India)
     let message = "Hello, I would like to order the following items:\n\n";
 
     // Ensure the cart array exists and has valid data
