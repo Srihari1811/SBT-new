@@ -423,7 +423,7 @@
 }
 
 .footer .copyright {
-    padding: 25px 0;
+    /* padding: 25px 25px 0px 25px; */
     font-size: 15px;
     border-top: 1px solid rgba(256, 256, 256, .1);
 }
@@ -1110,3 +1110,11 @@ h1.display-4 {
 
 
 /* product cart css media q */
+
+.nav-pills > .nav-item {
+    margin-top: 10px; /* Add margin-top to all nav-items */
+}
+
+.nav-pills > .nav-item:first-child {
+    margin-top: 10px; /* Ensure the first row doesn't get a margin */
+}
